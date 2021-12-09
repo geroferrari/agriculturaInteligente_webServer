@@ -1,0 +1,16 @@
+{% extends "main/base.html" %}
+
+{% load static %}
+
+{% block content %}
+<div class="contenedorFormularioCampo">
+
+
+    <form action="" method="POST" style="text-align: center;">
+        {% csrf_token %}
+        <table style="color: white; margin: 20px auto;">{{ConfigurationFieldValues.as_table}}</table>
+        <input type="submit" value="Enviar" style="width: 150px;">
+    </form>    
+</div>
+
+{% endblock %}

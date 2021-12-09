@@ -1,0 +1,117 @@
+<html>
+
+<head>
+
+  {% load static %}
+
+    <!-- Bootstrap -->
+    <link href="{% static 'main/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+     <!-- Fonts -->
+    
+     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap" rel="stylesheet"> 
+     <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i" rel="stylesheet">
+     
+
+    <!-- Styles -->
+    <link href="{% static 'main/css/gestion.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.css" />
+</head>
+
+<body>
+  {% if user.is_authenticated %}
+    <h3 class="text-center text-white d-none d-lg-block py-2" style="background-color: rgba(24, 64, 8);">
+        <span class="h3">        Bienvenido <b>{{ user.username }}</b>.
+        </span>
+      </h3>
+
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand text-uppercase text-expanded font-weight-bold d-lg-none" href="{% url 'Home' %}">Gestión de Pedidos</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav mx-auto">
+            <li class="nav-item {% if request.path == '/' %} active {% endif%} px-4">
+              <a class="nav-link text-uppercase text-expanded" href="{% url 'Home' %}">Inicio</a>
+            </li>
+            <li class="nav-item dropdown {% if request.path == '/sensors' %} active {% endif%} px-4">
+              <a class="nav-link dropdown-toggle text-uppercase text-expanded" href="{% url 'sensors' %}" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Mediciones</a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" style="background-color:rgba(24, 64, 8) ;">
+                <a class="dropdown-item" href="#" style="color: white;">Humedad</a>
+                <a class="dropdown-item" href="#" style="color: white;">Temperatura</a>
+                <a class="dropdown-item" href="#" style="color: white;">Pronostico</a>
+              </div>
+            </li>
+            <li class="nav-item  {% if request.path == '/irrigation' %} active {% endif%} px-4">
+              <a class="nav-link text-uppercase text-expanded" href="{% url 'irrigation' %}">Riego</a>
+            </li>
+            <li class="nav-item  {% if request.path == '/configuration' %} active {% endif%} px-4">
+              <a class="nav-link text-uppercase text-expanded" href="{% url 'configuration_field' %}">Configuración Sistema</a>
+            </li>
+            <li class="nav-item  {% if request.path == '/logout' %} active {% endif%} px-4">
+              <a class="nav-link text-uppercase text-expanded" href="{% url 'logout' %}">Cerrar Sesión</a>
+            </li>
+          
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+
+   <!-- contenido llenado por los hijos -->
+
+   {% block content %}
+
+   {% endblock %}
+   <!-- Footer -->
+    <footer class="footer text-faded text-center py-5">
+      <div class="container">
+        <p class="m-0">
+	        <a href="#" class="link">
+	          <span class="fa-stack fa-lg">
+	            <i class="fa fa-circle fa-stack-2x"></i>
+	            <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+	          </span>
+	        </a>
+	        <a href="#" class="link">
+	          <span class="fa-stack fa-lg">
+	            <i class="fa fa-circle fa-stack-2x"></i>
+	            <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+	          </span>
+	        </a>
+	        <a href="#" class="link">
+	          <span class="fa-stack fa-lg">
+	            <i class="fa fa-circle fa-stack-2x"></i>
+	            <i class="fa fa-instagram fa-stack-1x fa-inverse"></i>
+	          </span>
+	        </a>
+	    </p>
+        <p class="m-0 mbt">
+        	<a href="sample.html" class="link">Contacto</a> ·
+        	<a href="sample.html" class="link">Aviso legal</a> ·
+        	<a href="sample.html" class="link">Cookies</a>
+		</p>
+        <p class="m-0 mbt1">MAFEGE SA</p>
+      </div>
+	</footer>
+
+    <!-- Bootstrap -->
+    <script src="{% static 'main/vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'main/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
+
+{% else %}
+
+   <div class="h-100 row align-items-center mx-5 px-5"> <div class="col align-items-center" >
+     <a class="btn btn-to-login d-flex justify-content-center" href="{% url 'users' %}">Inicia Sesión para acceder al sitio</a>
+     </div>
+  </div>
+{% endif %}
+</body>
+
+
+</html>
