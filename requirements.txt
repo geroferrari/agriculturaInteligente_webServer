@@ -1,4 +1,4 @@
 Django==2.2.24
 DjangoRestFramework==3.12.4
 psycopg2==2.8.6
-web:gunicorn 
+guanicorn==20.1.0
