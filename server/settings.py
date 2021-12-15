@@ -25,7 +25,7 @@ REPOSITORY_ROOT = os.path.dirname(BASE_DIR)
 SECRET_KEY = ')^^c+!@w^2!ywjknnve9!+iy3b^sb^8c5_(ylkdpq-$$tl&)js'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
