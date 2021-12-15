@@ -85,7 +85,7 @@ WSGI_APPLICATION = 'server.wsgi.application'
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 import dj_database_url
-import decouple import config
+from decouple import config
 
 
 DATABASES = {
