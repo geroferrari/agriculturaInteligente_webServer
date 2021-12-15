@@ -144,4 +144,4 @@ EMAIL_PORT=587
 EMAIL_HOST_USER="gerooferrari@gmail.com"
 EMAIL_HOST_PASSWORD='rocoygero'
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
