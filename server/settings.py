@@ -25,9 +25,9 @@ REPOSITORY_ROOT = os.path.dirname(BASE_DIR)
 SECRET_KEY = ')^^c+!@w^2!ywjknnve9!+iy3b^sb^8c5_(ylkdpq-$$tl&)js'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -57,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'server.urls'
@@ -83,15 +84,14 @@ WSGI_APPLICATION = 'server.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
+import dj_database_url
+import decouple import config
+
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME' : 'd8e1snvrqarkl0',
-        'HOST' : 'ec2-52-200-188-218.compute-1.amazonaws.com',
-        'USER' : 'nvdizvvuqeixoh',
-        'PASSWORD' : '236a24141d613e32687e02d49db679179becd088cf75a93c7509fa2d921bb23c',
-        'PORT' : '5432'
-    }
+    'default': dj_database_url.config(
+        default=config('DATABASE_URL')
+    )
 }
 
 
@@ -144,4 +144,4 @@ EMAIL_PORT=587
 EMAIL_HOST_USER="gerooferrari@gmail.com"
 EMAIL_HOST_PASSWORD='rocoygero'
 
-django_heroku.settings(locals())
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticStorage'
