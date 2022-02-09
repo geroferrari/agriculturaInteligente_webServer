@@ -30,6 +30,7 @@ urlpatterns = [
     path('sensors/', include('sensors.urls')),
     path('users/', include('users.urls')),
     path('weatherAPI/', include('weatherAPI.urls')),
+    path('fuzzyLogic/', include('fuzzyLogic.urls')),
     path('configuration/', include('configuration.urls')),
 ]
 

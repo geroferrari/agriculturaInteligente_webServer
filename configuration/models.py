@@ -8,10 +8,12 @@ class ConfigurationFieldModel(models.Model):
     ciudad=models.CharField(max_length=50)
     temperatura_minima_local=models.SmallIntegerField()
     temperatura_maxima_local=models.SmallIntegerField()
-    humedad_minima_local=models.SmallIntegerField()
     humedad_maxima_local=models.SmallIntegerField()
-    tipo_suelo=models.CharField(max_length=50)
+    humedad_minima_local=models.SmallIntegerField()
+    humedad_requerida_local=models.SmallIntegerField()
     cultivo=models.CharField(max_length=50)
+    cantidad_sensores=models.IntegerField()
+    area_cubierta=models.IntegerField()
     created=models.DateTimeField(auto_now_add=True)
     updated=models.DateTimeField(auto_now_add=True)
 
@@ -20,4 +22,5 @@ class ConfigurationFieldModel(models.Model):
 
     def __str__(self):
         return self.nombre_campo
+
 

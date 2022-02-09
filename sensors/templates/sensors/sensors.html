@@ -1,0 +1,73 @@
+{% extends "main/base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+
+  <table style="width: 100%;">
+    {% for i in sensor %}
+
+    <tr style="padding: 2%;"> 
+      <td style="width: 20%; padding: 10;">
+           <p style="width: 100%;"> <a style="width: 100%;" href="#grafico{{ i }}" > Sensor {{ i }}</p>
+      </td>
+
+      <td  style="width: 80%; padding: 10;" id="grafico{{ i }}">         
+         <div style="width: 80%;"> <canvas id="chart-historial-humedad-{{ i }}" style="background-color: white; "> </div></canvas>
+      </td>
+    </tr>
+
+  </table>
+
+<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
+<script src='http://cdn.zingchart.com/zingchart.min.js'></script>
+ 
+<script src="https://cdn.zingchart.com/zingchart.min.js"></script>
+
+{% block jQuery %}
+
+<script>
+  
+  // **************************** //
+  // chart-historial-humedad //
+
+  var endpoint= '/api/data/sensor{{i}}'
+  var chartHistorialHumedadData=[]
+  var chartHistorialHumedadLabels=[]
+  
+  $.ajax({
+    method: "GET",
+    url: endpoint,
+    success: function(data){
+     chartHistorialHumedadData = data.default
+     chartHistorialHumedadLabels = data.labels
+     var ctx = document.getElementById('chart-historial-humedad-{{i}}').getContext('2d')
+     var myChart = new Chart(ctx, {
+     type: 'line',
+      data: {
+        labels: chartHistorialHumedadLabels,
+        datasets: [{
+          label: 'Historial Humedad del Suelo Promedio',
+          data: chartHistorialHumedadData,
+        }]
+      },
+     }) 
+    },
+    error: function(error_data){
+      console.log("error")
+      console.log(error_data)
+    }
+  
+  })  
+
+</script>
+{% endblock %}
+
+{% endfor %}
+
+{% endblock %}

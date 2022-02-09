@@ -1,0 +1,183 @@
+{% extends "main/base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="example">
+
+  <div class="container-2">
+       <div class="row">
+         <!-- Grafico de Humedad del Suelo-->
+         <div class="col-sm-3" style="background-color: red;">
+          <h2>Humedad del Suelo Promedio</h2>
+          <div style="align-items: center;" id='chart-humedad-suelo'></div>
+        </div>
+         <!-- Grafico de condiciones climaticas actuales-->
+        <div  >
+          {% include "weatherAPI/realTimeWeather.html" %}
+        </div>
+         <!-- Grafico de pronostico mañana-->
+        <div class="col-sm-3" >
+          <div id='chart-clima-pronostico'></div>
+        </div>
+         <!-- Grafico historial humedad suelo campo, promedio entre sensores?-->
+        <div class="col-xl-6" style="background-color: yellow;">
+          <canvas id="chart-historial-humedad" style="background-color: white;"></canvas>
+        </div>
+         <!-- mapa o humedad del suelo por sectores? -->
+         <div class="col-sm-4" style="background-color:black;">
+          <div id='chart-mapa'></div>
+         </div>  
+  
+      </div>
+         <!-- Estado de los sensores. Bateria? -->
+      <div class="row" style="background-color:violet;">
+        <div id='chart-estado-sensores'></div>
+      </div>   
+  </div>
+
+<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
+<script src='http://cdn.zingchart.com/zingchart.min.js'></script>
+ 
+<script src="https://cdn.zingchart.com/zingchart.min.js"></script>
+
+{% block jQuery %}
+
+
+<script>
+
+// **************************** //
+// chart-humedad-suelo //
+var myJson = {
+  "graphset": [{
+    "type": "mixed",
+    "background-color": "white",
+    "scale-x": {
+      "visible": 0
+    },
+    "scale-y": {
+      "guide": {
+        "visible": 0
+      },
+      "tick": {
+        "line-color": "red",
+        "line-width": 2
+      },
+      "line-width": 1,
+      "line-color": "red",
+      "values": "0:100:10",
+      "format": "%v%",
+      "markers": [{
+        "type": "line",
+        "range": 55
+      }]
+    },
+    "tooltip": {
+      "visible": 0
+    },
+    "plot": {
+      "bars-overlap": "100%",
+      "hover-state": {
+        "visible": 0
+      }
+    },
+    "series": [{
+        "type": "bar",
+        "values": [100],
+        "gradient-colors": "green yellow green",
+        "gradient-stops": "0.1 0.5 1",
+        "fill-angle": 180
+      },
+      {
+        "type": "bar",
+        "values": [80],
+        "background-color": "#4f4f4f",
+        "alpha": 0.7,
+        "plot": {
+          "animation": {
+            "delay": 800,
+            "effect": 11,
+            "method": 0
+          }
+        }
+      },
+      {
+        "type": "scatter",
+        "values": [80],
+        "marker": {
+          "type": "rectangle",
+          "height": 1,
+          "width": "100%"
+        }
+      }
+    ]
+  }]
+};
+
+zingchart.render({
+  id: 'chart-humedad-suelo',
+  data: myJson,
+  height: 400,
+  width: 200
+});
+
+// **************************** //
+// chart-clima-actual //
+
+// **************************** //
+// chart-clima-pronostico //
+
+// **************************** //
+// chart-historial-humedad //
+var endpoint= '/api/data/'
+var chartHistorialHumedadData=[]
+var chartHistorialHumedadLabels=[]
+
+$.ajax({
+  method: "GET",
+  url: endpoint,
+  success: function(data){
+   chartHistorialHumedadData = data.default
+   chartHistorialHumedadLabels = data.labels
+   var ctx = document.getElementById('chart-historial-humedad').getContext('2d')
+   var myChart = new Chart(ctx, {
+   type: 'line',
+    data: {
+      labels: chartHistorialHumedadLabels,
+      datasets: [{
+        label: 'Historial Humedad del Suelo Promedio',
+        data: chartHistorialHumedadData,
+      }]
+    },
+   }) 
+  },
+  error: function(error_data){
+    console.log("error")
+    console.log(error_data)
+  }
+
+})  
+
+// **************************** //
+// chart-mapa  //
+
+
+// **************************** //
+// chart-estado-sensores //
+
+
+
+
+
+
+</script>
+     
+  
+{% endblock %}
+
+{% endblock %}

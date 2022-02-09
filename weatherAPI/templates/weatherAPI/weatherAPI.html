@@ -1,76 +1,57 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "main/base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.css" />
-</head>
+{% load static %}
 
-<body>
-    <section class="hero is-primary">
-        <div class="hero-body">
-            <div class="container">
-                <h1 class="title">
-                    What's the weather like?
-                </h1>
-            </div>
-        </div>
-    </section>
-    <section class="section">
-        <div class="container">
-            <div class="columns">
-                <div class="column is-offset-4 is-4">
-                    <form method="POST">
-                        {% csrf_token %}
-                        <div class="field has-addons">
-                            <div class="control is-expanded">
-                                {{ form.name }}
-                            </div>
-                            <div class="control">
-                                <button type="submit" class="button is-info">
-                                    Add City
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section class="section">
-        <div class="container">
-            <div class="columns">
-                <div class="column is-offset-4 is-4">
-                    {% for city_weather in weather_data %}
-                    <div class="box">
-                        <article class="media">
-                            <div class="media-left">
-                                <figure class="image is-50x50">
-                                    <img src="http://openweathermap.org/img/w/{{ city_weather.icon }}.png" alt="Image">
-                                </figure>
-                            </div>
-                            <div class="media-content">
-                                <div class="content">
-                                    <p>
-                                        <span class="title">{{ city_weather.city }}</span>
-                                        <br>
-                                        <span class="subtitle">{{ city_weather.temperature }}° C</span>
-                                        <br> {{ city_weather.description }}
-                                    </p>
-                                </div>
-                            </div>
-                        </article>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-    </section>
-    <footer class="footer">
-    </footer>
-</body>
+{% block content %}
 
-</html>
+<style>
+#ul-weatherAPI  {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+}
+
+#li-weatherAPI {
+	float: left;
+	padding-left:4%;
+	margin-left:1%;
+	padding-right:4%;
+	margin-right:1%;
+}
+
+#li-weatherAPI a {
+	display: block;
+	color: white;
+	text-align: center;
+	padding: 16px;
+	text-decoration: none;
+}
+</style>
+
+<div style="background-color:rgb(13, 56, 13); margin-top: 5%; width: 95%; margin-left: auto; margin-right: auto;">
+	<h1 style="color: beige; margin: 1%; text-align: center;">Pronostico extendido {{city}}</h1>
+
+		<div style="color: beige;">	
+			<ul id="ul-weatherAPI" style="background-color: rgb(104, 94, 94);">
+				{% for x,y in forcast_data_list.items%}
+				<li id="li-weatherAPI" ><h4>{{y.day}}</h4>
+					<h3>{{y.description}} </h3>
+
+					<figure class="icons">
+	<img src="http://openweathermap.org/img/wn/{{y.icon}}.png" alt="Image" width="100px">
+
+					</figure>
+					<h5>{{y.temperature}}°C</h5>
+					<h6>Hum: {{y.humidity}} %</h6>
+				</li>
+				{% endfor%}
+			</ul>
+			<div class="clear"> </div>
+		</div>
+	</div>
+</div>	
+{{forecast_data_list}}
+
+
+{% endblock %}

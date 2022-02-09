@@ -38,20 +38,18 @@
             <li class="nav-item {% if request.path == '/' %} active {% endif%} px-4">
               <a class="nav-link text-uppercase text-expanded" href="{% url 'Home' %}">Inicio</a>
             </li>
-            <li class="nav-item dropdown {% if request.path == '/sensors' %} active {% endif%} px-4">
-              <a class="nav-link dropdown-toggle text-uppercase text-expanded" href="{% url 'sensors' %}" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Mediciones</a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" style="background-color:rgba(24, 64, 8) ;">
-                <a class="dropdown-item" href="#" style="color: white;">Humedad</a>
-                <a class="dropdown-item" href="#" style="color: white;">Temperatura</a>
-                <a class="dropdown-item" href="#" style="color: white;">Pronostico</a>
-              </div>
+            <li class="nav-item  {% if request.path == '/sensors' %} active {% endif%} px-4">
+              <a class="nav-link text-uppercase text-expanded" href="{% url 'sensors' %}">Sensores</a>
             </li>
+            <li class="nav-item  {% if request.path == '/weatherAPI' %} active {% endif%} px-4">
+              <a class="nav-link text-uppercase text-expanded" href="{% url 'weatherAPI' %}">Pronostico</a>
+            </li>            
             <li class="nav-item  {% if request.path == '/irrigation' %} active {% endif%} px-4">
               <a class="nav-link text-uppercase text-expanded" href="{% url 'irrigation' %}">Riego</a>
             </li>
             <li class="nav-item  {% if request.path == '/configuration' %} active {% endif%} px-4">
-              <a class="nav-link text-uppercase text-expanded" href="{% url 'configuration_field' %}">Configuración Sistema</a>
-            </li>
+              <a class="nav-link text-uppercase text-expanded" href="{% url 'configuration_field' %}">Configuración </a>
+            </li>       
             <li class="nav-item  {% if request.path == '/logout' %} active {% endif%} px-4">
               <a class="nav-link text-uppercase text-expanded" href="{% url 'logout' %}">Cerrar Sesión</a>
             </li>
@@ -67,42 +65,18 @@
    {% block content %}
 
    {% endblock %}
-   <!-- Footer -->
-    <footer class="footer text-faded text-center py-5">
-      <div class="container">
-        <p class="m-0">
-	        <a href="#" class="link">
-	          <span class="fa-stack fa-lg">
-	            <i class="fa fa-circle fa-stack-2x"></i>
-	            <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
-	          </span>
-	        </a>
-	        <a href="#" class="link">
-	          <span class="fa-stack fa-lg">
-	            <i class="fa fa-circle fa-stack-2x"></i>
-	            <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
-	          </span>
-	        </a>
-	        <a href="#" class="link">
-	          <span class="fa-stack fa-lg">
-	            <i class="fa fa-circle fa-stack-2x"></i>
-	            <i class="fa fa-instagram fa-stack-1x fa-inverse"></i>
-	          </span>
-	        </a>
-	    </p>
-        <p class="m-0 mbt">
-        	<a href="sample.html" class="link">Contacto</a> ·
-        	<a href="sample.html" class="link">Aviso legal</a> ·
-        	<a href="sample.html" class="link">Cookies</a>
-		</p>
-        <p class="m-0 mbt1">MAFEGE SA</p>
-      </div>
-	</footer>
+
 
     <!-- Bootstrap -->
     <script src="{% static 'main/vendor/jquery/jquery.min.js' %}"></script>
     <script src="{% static 'main/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
+    <script src='http://cdn.zingchart.com/zingchart.min.js'></script>
+     
 
 {% else %}
 

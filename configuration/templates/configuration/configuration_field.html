@@ -3,14 +3,16 @@
 {% load static %}
 
 {% block content %}
+<center>
 <div class="contenedorFormularioCampo">
-
-
-    <form action="" method="POST" style="text-align: center;">
+    <form action="" method="POST" style="text-align: center; background-color: gray; width: 50%; margin-top: 5%;">
         {% csrf_token %}
-        <table style="color: white; margin: 20px auto;">{{ConfigurationFieldValues.as_table}}</table>
-        <input type="submit" value="Enviar" style="width: 150px;">
+        <h3 style="text-decoration-color: green;">Complete el formulario por una unica vez</h3>
+        <table style="color: red; margin: 20px auto;">{{ConfigurationFieldValues.as_table}}</table>
+        <input type="submit" value="Guardar" style="width: 150px;">
     </form>    
 </div>
+</center>
+
 
 {% endblock %}

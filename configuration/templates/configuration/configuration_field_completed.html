@@ -1,0 +1,32 @@
+{% extends "main/base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<div style="width: 80%;   margin-left: auto; margin-right: auto;">
+    <h3 style="color: beige; padding: 1%; margin-top: 2%; background-color:rgb(13, 56, 13); font-size:larger; text-align: center;">Configuración inicial del sistema</h3>
+
+    <form action="" method="POST" style="background-color: gray; padding-left: 5%; ">
+        {% csrf_token %}
+        {% for s in ConfigurationFieldValues %}
+       
+        <input type="hidden" name="id" value="{{s.id}}"></ul>
+        <ul><input type="text" name="nombre_campo" value="{{s.nombre_campo}}"> Nombre del Campo </ul>
+        <ul><input type="text" name="provincia" value="{{s.provincia}}"> Provincia</ul>
+        <ul><input type="text" name="ciudad" value="{{s.ciudad}}"> Ciudad</ul>
+        <ul><input type="number" name="temperatura_minima_local" value="{{s.temperatura_minima_local}}"> Temperatura Minima Local (promedio historico)</ul>
+        <ul><input type="number" name="temperatura_maxima_local" value="{{s.temperatura_maxima_local}}"> Temperatura Máxima Local (promedio historico)</ul>
+        <ul><input type="number" name="humedad_requerida_local" value="{{s.humedad_requerida_local}}"> Humedad del suelo ideal Requerida por el cultivo</ul>
+        <ul><input type="number" name="humedad_minima_local" value="{{s.humedad_minima_local}}"> Humedad del suelo minima soportada por el cultivo</ul>
+        <ul><input type="number" name="humedad_maxima_local" value="{{s.humedad_maxima_local}}"> Humedad del suelo maxima soportada por el cultivo</ul>
+        <ul><input type="text" name="cultivo" value="{{s.cultivo}}"> Tipo de Cultivo</ul>
+        <ul><input type="number" name="cantidad_sensores" value="{{s.cantidad_sensores}}"> Cantidad de Sensores</ul>
+        <ul><input type="number" name="area_cubierta" value="{{s.area_cubierta}}"> Area Cubierta (m2)</ul>
+  
+        {% endfor %}
+        <div style="text-align:center"><input type="submit" value="Editar" style="width: 150px;"></div>
+    </form>    
+</div>
+
+{% endblock %}

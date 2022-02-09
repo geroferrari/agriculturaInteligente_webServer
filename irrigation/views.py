@@ -1,5 +1,27 @@
+from datetime import time
+from time import strptime
 from django.shortcuts import render
-from irrigation.models import Post
+from .forms import irrigationForm
+from .models import irrigationModel
+from fuzzyLogic.models import irrigationHistory
+
 
 def irrigation(request):
-    return render(request, "irrigation/irrigation.html", {"posts": posts})
+
+    if request.method == "POST":
+        data=request.POST
+        irrigationValues=irrigationModel.objects.get(id=1)
+        irrigationValues.automatico =  request.POST.get("automatico", "off")
+        irrigationValues.encendido = request.POST.get("encendido", "off")
+        irrigationValues.riego_diurno = request.POST.get("riego_diurno", "off")
+        irrigationValues.tiempo_maximo_riego = int(data["tiempo_maximo_riego"])
+        irrigationValues.envio_alertas = request.POST.get("envio_alertas", "off")
+        irrigationValues.cantidad_dias_sin_lluvia = int(data["cantidad_dias_sin_lluvia"])
+        print(irrigationValues)
+        irrigationValues.save()
+
+    irrigationValues=irrigationModel.objects.all()
+    irrigationHistoryValues=irrigationHistory.objects.all()
+
+
+    return render(request, "irrigation/irrigation.html", {"irrigationValues": irrigationValues, "irrigationHistory" : irrigationHistoryValues})

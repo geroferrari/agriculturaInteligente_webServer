@@ -1,14 +1,8 @@
 from django.forms import ModelForm, TextInput
-from .models import HistoricWeatherModel, FutureWeatherModel 
+from .models import HistoricWeatherModel 
 
 class HistoricWeatherForm(ModelForm):
     class Meta:
         model = HistoricWeatherModel 
-        fields = ['city',  'temperature', 'temperature_min', 'temperature_max', 'humidity', 'precipitation' ]
-        widgets = {'city' : TextInput(attrs={'class' : 'input', 'placeholder' : 'City Name'})}
+        fields = ['date',  'temperature', 'temperature_min', 'temperature_max', 'precipitation', 'precipitation_prob' ]
 
-class FutureWeatherForm(ModelForm):
-    class Meta:
-        model = FutureWeatherModel 
-        fields = ['city', 'temperature', 'humidity', 'precipitation'  ]
-        widgets = {'city' : TextInput(attrs={'class' : 'input', 'placeholder' : 'City Name'})}        
