@@ -1,18 +1,22 @@
 import threading
-
+from time import sleep
+from datetime import datetime
+from .sensorsAPI import * 
 from .models import *
 
-class SensorThread(threading.Thread):
+class CreateMqttThread(threading.Thread):
 
-    def __init__(self, total):
-        self.total = total
+    def __init__(self):
         threading.Thread.__init__(self)
+        self.started = datetime.now()
 
     def run(self):
         try:
-            print("works")
-        
-        except:
-            print("does not work")
+            while True:
+                mqttListener()
+                sleep(60)
+        except Exception as e:
+            print(e)
+
 
 #https://github.com/pradeesi/Paho-MQTT-with-Python

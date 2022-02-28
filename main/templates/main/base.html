@@ -39,7 +39,7 @@
               <a class="nav-link text-uppercase text-expanded" href="{% url 'Home' %}">Inicio</a>
             </li>
             <li class="nav-item  {% if request.path == '/sensors' %} active {% endif%} px-4">
-              <a class="nav-link text-uppercase text-expanded" href="{% url 'sensors' %}">Sensores</a>
+              <a class="nav-link text-uppercase text-expanded" href="{% url 'sensors' %}">Humedad</a>
             </li>
             <li class="nav-item  {% if request.path == '/weatherAPI' %} active {% endif%} px-4">
               <a class="nav-link text-uppercase text-expanded" href="{% url 'weatherAPI' %}">Pronostico</a>
@@ -49,6 +49,9 @@
             </li>
             <li class="nav-item  {% if request.path == '/configuration' %} active {% endif%} px-4">
               <a class="nav-link text-uppercase text-expanded" href="{% url 'configuration_field' %}">Configuración </a>
+            </li>       
+            <li class="nav-item  {% if request.path == 'admin:index' %} active {% endif%} px-4">
+              <a class="nav-link text-uppercase text-expanded" href="{% url 'admin:index' %}">Usuarios </a>
             </li>       
             <li class="nav-item  {% if request.path == '/logout' %} active {% endif%} px-4">
               <a class="nav-link text-uppercase text-expanded" href="{% url 'logout' %}">Cerrar Sesión</a>

@@ -4,70 +4,63 @@
 
 {% block content %}
 
+<div id="container" style="width: 75%; background-color: rgb(210, 243, 156); margin-left: auto; margin-right: auto; margin-top: 2%;"  >
+  <canvas id="population-chart" data-url="{% url 'population-chart' %}"></canvas>
+</div>
 
-  <table style="width: 100%;">
-    {% for i in sensor %}
-
-    <tr style="padding: 2%;"> 
-      <td style="width: 20%; padding: 10;">
-           <p style="width: 100%;"> <a style="width: 100%;" href="#grafico{{ i }}" > Sensor {{ i }}</p>
-      </td>
-
-      <td  style="width: 80%; padding: 10;" id="grafico{{ i }}">         
-         <div style="width: 80%;"> <canvas id="chart-historial-humedad-{{ i }}" style="background-color: white; "> </div></canvas>
-      </td>
-    </tr>
-
-  </table>
-
-<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
-<script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
-<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
-<script src='http://cdn.zingchart.com/zingchart.min.js'></script>
- 
-<script src="https://cdn.zingchart.com/zingchart.min.js"></script>
-
-{% block jQuery %}
-
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
 <script>
-  
-  // **************************** //
-  // chart-historial-humedad //
 
-  var endpoint= '/api/data/sensor{{i}}'
-  var chartHistorialHumedadData=[]
-  var chartHistorialHumedadLabels=[]
-  
-  $.ajax({
-    method: "GET",
-    url: endpoint,
-    success: function(data){
-     chartHistorialHumedadData = data.default
-     chartHistorialHumedadLabels = data.labels
-     var ctx = document.getElementById('chart-historial-humedad-{{i}}').getContext('2d')
-     var myChart = new Chart(ctx, {
-     type: 'line',
-      data: {
-        labels: chartHistorialHumedadLabels,
-        datasets: [{
-          label: 'Historial Humedad del Suelo Promedio',
-          data: chartHistorialHumedadData,
-        }]
-      },
-     }) 
-    },
-    error: function(error_data){
-      console.log("error")
-      console.log(error_data)
-    }
-  
-  })  
+  $(function () {
+
+    var $populationChart = $("#population-chart");
+    $.ajax({
+      url: $populationChart.data("url"),
+      success: function (data) {
+
+        var ctx = $populationChart[0].getContext("2d");
+
+        dataToPrint = {
+          labels: data.data1.labels,
+          datasets: [{
+            type: 'line',
+            label: "Sensor 1",
+            data: data.data1.data,
+            borderColor: 'rgb(255, 99, 132)',
+            tension: 0.5
+          }, {
+            type: 'line',
+            label: "Sensor 2",
+            data: data.data2.data,
+            borderColor: 'rgb(54, 162, 235)',
+            tension: 0.5
+          }
+          ]
+        };
+        
+        new Chart(ctx, {
+          type: 'line',
+          data: dataToPrint,
+          options: {
+
+            responsive: true,
+            legend: {
+              position: 'top',
+            },
+            title: {
+              display: true,
+              text: 'Population Bar Chart'
+            }
+          }
+        });
+
+      }
+    });
+
+  });
 
 </script>
-{% endblock %}
 
-{% endfor %}
 
 {% endblock %}

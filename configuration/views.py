@@ -26,10 +26,6 @@ def configuration_field(request):
             ConfigurationFieldValues.nombre_campo = data["nombre_campo"]
             ConfigurationFieldValues.provincia = data["provincia"]
             ConfigurationFieldValues.ciudad = data["ciudad"]
-            ConfigurationFieldValues.latitud = data["latitud"]
-            ConfigurationFieldValues.longitud = data["longitud"]
-            ConfigurationFieldValues.temperatura_minima_local = int(data["temperatura_minima_local"])
-            ConfigurationFieldValues.temperatura_maxima_local = int(data["temperatura_maxima_local"])
             ConfigurationFieldValues.humedad_maxima_local = int(data["humedad_maxima_local"])
             ConfigurationFieldValues.humedad_minima_local = int(data["humedad_minima_local"])
             ConfigurationFieldValues.humedad_requerida_local = int(data["humedad_requerida_local"])
@@ -45,7 +41,7 @@ def configuration_field(request):
             ConfigurationFieldValues.save()
 
             i = 1
-            while i < int(data['cantidad_sensores']):
+            while i <= int(data['cantidad_sensores']):
                 sensor = "sensor" + str(i)
                 cursor = connection.cursor()
                 database_name = "CREATE TABLE " + str(sensor) + " (Id int(11), humedad int(4), bateria int(4), estado boolean, date datetime )"

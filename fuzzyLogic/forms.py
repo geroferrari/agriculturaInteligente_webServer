@@ -1,8 +1,7 @@
 from django import forms
-from .models import irrigationHistory
+from .models import irrigationHistoryModel
 
 class irrigationHistoryForm(forms.ModelForm):
     class Meta:
-        model= irrigationHistory
-        fields= ["duracion", "cantidad_agua", "humedad_antes", "humedad_despues"]
-
+        model= irrigationHistoryModel
+        fields= ["duracion_maxima", "duracion", "cantidad_agua", "humedad_antes", "humedad_despues", "temperatura", "numero_paso"]

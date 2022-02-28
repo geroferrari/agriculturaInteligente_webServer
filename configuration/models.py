@@ -6,8 +6,6 @@ class ConfigurationFieldModel(models.Model):
     nombre_campo=models.CharField(max_length=50)
     provincia=models.CharField(max_length=50)
     ciudad=models.CharField(max_length=50)
-    temperatura_minima_local=models.SmallIntegerField()
-    temperatura_maxima_local=models.SmallIntegerField()
     humedad_maxima_local=models.SmallIntegerField()
     humedad_minima_local=models.SmallIntegerField()
     humedad_requerida_local=models.SmallIntegerField()

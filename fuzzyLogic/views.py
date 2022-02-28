@@ -15,17 +15,11 @@ def fuzzyLogic(data):
 	FuzzyInputVariableSoilHumidity_required = data["humidity_required"]  
 	FuzzyInputVariableSoilHumidity_max = data["humidity_max"]
 
-	FuzzyOutputVariableIrrigation = "Water" 
+	FuzzyOutputVariableIrrigation = "Time" 
 	FuzzyOutputVariableIrrigation_min = 0
 	FuzzyOutputVariableIrrigation_max = data["irrigation_max"]
 
 	FuzzyVariable_step = 100  
-
-	#booleano para saber si va a llover o no por los proximos X dias
-	weatherVariable = data["rain_offset"]
-	#Offset configurado por el usuario para que solo se riegue si la humedad registrada es menor a%
-	irrigationOffset = data["humidity_min"] 
-
 
 	# z/2 = y - x
 	# z el rango total de temperaturas que se abarca
@@ -47,11 +41,9 @@ def fuzzyLogic(data):
 	#soilHumidity_x = 5
 	#soilHumidity_y = soilHumidityRangeLength + soilHumidity_x  #40
 
-
 	# Agua riego
 	irrigation_x = 10
 	irrigation_y = FuzzyOutputVariableIrrigation_max/4 + irrigation_x
-
 
 	temperature = FuzzyInputVariable(FuzzyInputVariableTemperature,FuzzyInputVariableTemperature_min, FuzzyInputVariableTemperature_max, FuzzyVariable_step)
 	temperature.add_triangular('cold', FuzzyInputVariableTemperature_min, FuzzyInputVariableTemperature_min, FuzzyInputVariableTemperature_middle)
@@ -82,63 +74,53 @@ def fuzzyLogic(data):
 	system.add_rule(
 			{ 'Temperature':'cold',
 				'Soil Humidity':'wet' },
-			{ 'Water':'super slow'})
+			{ 'Time':'super slow'})
 
 	system.add_rule(
 			{ 'Temperature':'cold',
 				'Soil Humidity':'medium' },
-			{ 'Water':'normal'})
+			{ 'Time':'normal'})
 
 	system.add_rule(
 			{ 'Temperature':'cold',
 				'Soil Humidity':'dry' },
-			{ 'Water':'fast'})
+			{ 'Time':'fast'})
 
 	system.add_rule(
 			{ 'Temperature':'medium',
 				'Soil Humidity':'wet' },
-			{ 'Water':'super slow'})
+			{ 'Time':'super slow'})
 
 	system.add_rule(
 			{ 'Temperature':'medium',
 				'Soil Humidity':'medium' },
-			{ 'Water':'normal'})
+			{ 'Time':'normal'})
 
 	system.add_rule(
 			{ 'Temperature':'medium',
 				'Soil Humidity':'dry' },
-			{ 'Water':'fast'})
+			{ 'Time':'fast'})
 
 	system.add_rule(
 			{ 'Temperature':'hot',
 				'Soil Humidity':'wet' },
-			{ 'Water':'super slow'})
+			{ 'Time':'super slow'})
 
 	system.add_rule(
 			{ 'Temperature':'hot',
 				'Soil Humidity':'medium' },
-			{ 'Water':'fast'})
+			{ 'Time':'fast'})
 
 	system.add_rule(
 			{ 'Temperature':'hot',
 				'Soil Humidity':'dry' },
-			{ 'Water':'super fast'})
+			{ 'Time':'super fast'})
 
 
 	output = system.evaluate_output({
-					'Temperature':5,
-					'Soil Humidity':25
+					'Temperature':data["temperature"],
+					'Soil Humidity':data["humidity_measured"]
 			})
 
-
-	if (output['Water'] <= irrigationOffset): 
-		print("El sistema de riego no se encederá, no se cumple con el offset definido por el usuario")
-
-# si el sistema de riego se enciende que hago? 
-# cuando termina tengo que guardar los datos en la base de datos 
-#la humedad anterior primero, la hora de encendido tmb, y desp los otros datos los deberia guardar despues
-# deberia tener un boolean que pregunte si esta encendido
-
-
-	print(output)
+	return output
 
