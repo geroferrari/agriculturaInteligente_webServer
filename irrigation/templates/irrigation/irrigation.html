@@ -3,7 +3,8 @@
 {% load static %}
 
 {% block content %}
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+{% if irrigationValues != null %}
 
 <div style="width: 95%;   margin-left: auto; margin-right: auto;">
     <h1 style="color: beige; padding: 1%; margin-top: 2%; background-color:rgb(13, 56, 13); font-size:larger ;">Configuracion actual del Riego</h1>
@@ -16,36 +17,36 @@
         <ul> 
         <div class="form-check form-switch">
             <input style= "width:3%;" name="automatico" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" {% if s.automatico == "on" %}  checked {% endif %}>
-            <label class="form-check-label" for="flexSwitchCheckDefault">Función de riego automatico habilitada</label>
+            <label class="form-check-label" for="flexSwitchCheckDefault" style="margin-left: 3%;">   Función de riego automatico habilitada</label>
         </div>
         </ul> 
         <ul> 
             <div class="form-check form-switch">
                 <input style= "width:3%;" name="encendido" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault"  {% if s.encendido == "on" %}  checked {% endif %}>
-                <label class="form-check-label" for="flexSwitchCheckDefault">Encender Riego</label>
+                <label class="form-check-label" for="flexSwitchCheckDefault" style="margin-left: 3%;">Encender Riego</label>
                 <small style="font-size: x-small;"> (Encienda o Apague el riego de forma manual por medio del boton) </small>
             </div>
         </ul> 
         <ul> 
             <div class="form-check form-switch">
                 <input style= "width:3%;" name="riego_diurno" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" {% if s.riego_diurno == "on" %}  checked {% endif %}>
-                <label class="form-check-label" for="flexSwitchCheckDefault">Riego Durante el día</label>
+                <label class="form-check-label" for="flexSwitchCheckDefault" style="margin-left: 3%;">Riego Durante el día</label>
                 <small style="font-size: x-small;"> (El Riego durante el día puede afectar el cultivo y aumentar las perdidas de agua por evapotranspiracion. Si deshabilita la opción el riego no ocurrirá durante el día) </small>
             </div>
         </ul> 
-        <ul> <input  style= "width:3%;" name="tiempo_maximo_riego" type="int" value="{{s.tiempo_maximo_riego}}" id="defaultCheck1"> Tiempo de Riego (min)
+        <ul> <input  style= "width:3%; margin-left: 1%;" name="tiempo_maximo_riego" type="int" value="{{s.tiempo_maximo_riego}}" id="defaultCheck1"> Tiempo de Riego (min)
         <small style="font-size: x-small;"> (Tiempo maximo que desea que el riego automatico este encendido. El valor debe ser tal que en condiciones extremas de sequedad, se logre llegar a la humedad deseada)</small>
         </ul> 
         <ul> 
             <div class="form-check form-switch">
                 <input style= "width:3%;"  name="envio_alertas" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" {% if s.envio_alertas == "on" %}  checked {% endif %}>
-                <label class="form-check-label" for="flexSwitchCheckDefault">Envio de Alertas por email</label>
+                <label class="form-check-label" for="flexSwitchCheckDefault" style="margin-left: 3%;">Envio de Alertas por email</label>
                 <small style="font-size: x-small;"> (se enviaran alertas de encendido y apagado de riego a los usuarios registrados) </small>
             </div>
         </ul> 
         <ul>
             <div>
-                <input  style= "width:3%;" name="cantidad_dias_sin_lluvia" type="number" value="{{s.cantidad_dias_sin_lluvia}}" id="defaultCheck1"> Dias sin lluvia 
+                <input  style= "width:3%; margin-left: 1%;" name="cantidad_dias_sin_lluvia" type="number" value="{{s.cantidad_dias_sin_lluvia}}" id="defaultCheck1"> Dias sin lluvia 
                 <small style="font-size: x-small;">(Se pospondrá el inicio del riego si en los proximos "X" dias se anuncia lluvia) </small>
             </div>  
         </ul>
@@ -83,4 +84,13 @@
         </tbody>
     </table>
 </div>
+
+{% else %}
+
+  <div style="background-color: whitesmoke; margin-left: 3%; margin-right: 3%; margin-top: 2%;">
+    <h1 style="text-align: center; text-decoration: black; font-size: x-large;">Dirigase al panel de configuración primero</h1>
+  </div>
+
+{% endif %}
+
 {% endblock %}

@@ -29,6 +29,8 @@
 }
 </style>
 
+{% if city != "" %}
+
 <div style="background-color:rgb(13, 56, 13); margin-top: 5%; width: 95%; margin-left: auto; margin-right: auto;">
 	<h1 style="color: beige; margin: 1%; text-align: center;">Pronostico extendido {{city}}</h1>
 
@@ -52,6 +54,14 @@
 	</div>
 </div>	
 {{forecast_data_list}}
+
+{% else %}
+
+  <div style="background-color: whitesmoke; margin-left: 3%; margin-right: 3%; margin-top: 2%;">
+    <h1 style="text-align: center; text-decoration: black; font-size: x-large;">Dirigase al panel de configuración primero</h1>
+  </div>
+
+{% endif %}
 
 
 {% endblock %}

@@ -1,8 +1,7 @@
-from asyncio.windows_events import NULL
 from django.shortcuts import render, redirect
 from .forms import ConfigurationFieldForm
-from django.db import connection
 from .models import ConfigurationFieldModel
+from irrigation.models import irrigationModel
 
 def configuration_field(request):
 
@@ -13,16 +12,7 @@ def configuration_field(request):
 
             ConfigurationFieldValues = ConfigurationFieldModel.objects.get(id = 1)
 
-            if ConfigurationFieldValues.cantidad_sensores < int(data['cantidad_sensores']):
-                i = ConfigurationFieldValues.cantidad_sensores + 1
-                while i < int(data['cantidad_sensores']):
-                    sensor = "sensor" + str(i)
-                    cursor = connection.cursor()
-                    database_name = "CREATE TABLE " + str(sensor) + " (Id int(11), humedad int(4), bateria int(4), estado boolean, date datetime )"
-                    cursor.execute(database_name)
-                    cursor.close()
-                    i=i+1
-
+            ConfigurationFieldValues.id = data["id"]
             ConfigurationFieldValues.nombre_campo = data["nombre_campo"]
             ConfigurationFieldValues.provincia = data["provincia"]
             ConfigurationFieldValues.ciudad = data["ciudad"]
@@ -30,7 +20,6 @@ def configuration_field(request):
             ConfigurationFieldValues.humedad_minima_local = int(data["humedad_minima_local"])
             ConfigurationFieldValues.humedad_requerida_local = int(data["humedad_requerida_local"])
             ConfigurationFieldValues.cultivo = data["cultivo"]
-            ConfigurationFieldValues.cantidad_sensores = int(data["cantidad_sensores"])
             ConfigurationFieldValues.area_cubierta = int(data["area_cubierta"])
     
             ConfigurationFieldValues.save()
@@ -40,22 +29,23 @@ def configuration_field(request):
             ConfigurationFieldValues=ConfigurationFieldForm(data)
             ConfigurationFieldValues.save()
 
-            i = 1
-            while i <= int(data['cantidad_sensores']):
-                sensor = "sensor" + str(i)
-                cursor = connection.cursor()
-                database_name = "CREATE TABLE " + str(sensor) + " (Id int(11), humedad int(4), bateria int(4), estado boolean, date datetime )"
-                cursor.execute(database_name)
-                cursor.close()
-                i=i+1
-        
-        return render(request, "configuration/configuration_field_completed.html", {'ConfigurationFieldValues': ConfigurationFieldValues})
+            irrigationValues=irrigationModel()
+            irrigationValues.id = 1
+            irrigationValues.automatico = "off"
+            irrigationValues.encendido = "off"
+            irrigationValues.riego_diurno = "off"
+            irrigationValues.tiempo_maximo_riego = 60
+            irrigationValues.envio_alertas = "off"
+            irrigationValues.cantidad_dias_sin_lluvia = 0
+            irrigationValues.save()
+
+        return render(request, "home/home.html")
 
     else: 
         rows=ConfigurationFieldModel.objects.count()
         if rows == 1:
             ConfigurationFieldValues=ConfigurationFieldModel.objects.all()
-            return render(request, "configuration/configuration_field_completed.html", {'ConfigurationFieldValues': ConfigurationFieldValues})
+            return render(request, "configuration/configuration_field.html", {'ConfigurationFieldValues': ConfigurationFieldValues})
         else:
             ConfigurationFieldValues=ConfigurationFieldForm()
-            return render(request, "configuration/configuration_field.html", {'ConfigurationFieldValues': ConfigurationFieldValues})
+            return render(request, "configuration/configuration_field.html")

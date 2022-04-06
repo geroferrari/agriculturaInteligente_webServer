@@ -62,19 +62,20 @@ class CreateFuzzyThread(threading.Thread):
                 
                 #algoritmo convergente:
                 step_number = 0
-                humidity_diference = 0
+                last_humidity_diference = 0
                 last_max_duration = 0
 
                 irrigationHistoryValues = irrigationHistoryModel.objects.all().order_by('-id')
                 for s in irrigationHistoryValues:
-                    #busco casos donde la humedad sea la misma o varie en un +-10% y la temperatura +-20%
-                    if abs(s.humedad_antes - humidity_measured) <= round(humidity_measured*0.1): 
-                        if abs(s.temperatura - round(temperature_data["temperature"])) <= round(temperature_data["temperature"]*0.2): 
-                            if abs(s.humedad_despues - configurationFieldValues.humedad_requerida_local) > round(configurationFieldValues.humedad_requerida_local*0.1):
+                    #busco casos donde la humedad sea la misma o varie en un +-5% y la temperatura +-10%
+                    if abs(s.humedad_antes - humidity_measured) <= round(humidity_measured*0.05): 
+                        if abs(s.temperatura - round(temperature_data["temperature"])) <= round(temperature_data["temperature"]*0.1): 
+                            if abs(s.humedad_despues - configurationFieldValues.humedad_requerida_local) > round(configurationFieldValues.humedad_requerida_local*0.05):
                                 #en el primer caso donde esto ocurra, deberia salir del for con el caudal de agua utilizado y el numero de paso
                                 
                                 last_max_duration = s.duracion_maxima
-                                humidity_diference = s.humedad_despues - configurationFieldValues.humedad_requerida_local
+
+                                last_humidity_diference = s.humedad_despues - configurationFieldValues.humedad_requerida_local
                                 step_number = s.numero_paso
                                 break
                             else:
@@ -88,6 +89,9 @@ class CreateFuzzyThread(threading.Thread):
                 #si el stepnumber es 0 significa que no hya coincidencias entones, defino que el porcentaje de cambio del caudal
                 #va a ser 10% y fijo el stepnumer en 1 para guardar en la base de datos
 
+                duration_percentage_flag = 0
+
+
                 if step_number == 1000:
                     duration_percentage_update = 0
                     break
@@ -95,16 +99,36 @@ class CreateFuzzyThread(threading.Thread):
                 elif step_number == 0:
                     duration_percentage_update = 0.1
                     step_number == 1
+
                 # si es distinto de cero, signifca que ya hay un stepnumber, entoces calculo el valor    
                 else:
-                    step_number +=1
+                    if last_humidity_diference > 0  and step_number == 1:
+                        duration_percentage_flag = 1
+                        step_number = 1
+                        duration_percentage_update = 0.1
+                        #significa que me pase del valor en el primer intento, tengo que empezar a restar de a 10%
+                    
+                    elif last_humidity_diference > 0 and step_number != 1:
+                        step_number+=1
+                        duration_percentage_update = duration_percentage_update - ()
+                        #significa que me pase del valor pero venia subiendo de a 10%, tengo que disminuir el porcentaje 
+                    
+                    elif last_humidity_diference < 0 and duration_percentage_flag == 1: 
+                        step_number += 1
+                        #seria cuando ya me habia pasado y tengo que empezar a retroceder bajando el %
+                        print()
+                    else: 
+                        step_number=1
+                        #cuando last_humidity_diference < 0 y todavia nunca llegue al valor. avanzo de a 10%
+                        print()
+
                     duration_percentage_update = 0.1 - (step_number*0.01)
-                    duration_percentage_update = duration_percentage_update * (1 - step_number*0.1)
+                    duration_percentage_update = duration_percentage_update * (duration_percentage_update * 0.1)
 
                 #actualizo la maxima duración del algoritmo para obtener una respuesta mas certera
-                if humidity_diference < 0:
+                if last_humidity_diference < 0:
                     last_max_duration = last_max_duration + last_max_duration * duration_percentage_update
-                elif humidity_diference == 0: 
+                elif last_humidity_diference == 0: 
                    last_max_duration = int(irrigationValues.tiempo_maximo_riego)
                 else:
                     last_max_duration = last_max_duration - last_max_duration * duration_percentage_update

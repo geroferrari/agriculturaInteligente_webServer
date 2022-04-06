@@ -1,6 +1,7 @@
 from django.db import models
 
 class irrigationModel(models.Model):
+    id=models.SmallIntegerField(primary_key=True)
     automatico=models.CharField(max_length=4)
     encendido=models.CharField(max_length=4)
     riego_diurno=models.CharField(max_length=4)

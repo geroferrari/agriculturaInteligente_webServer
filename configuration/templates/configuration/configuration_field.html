@@ -3,16 +3,42 @@
 {% load static %}
 
 {% block content %}
-<center>
-<div class="contenedorFormularioCampo">
-    <form action="" method="POST" style="text-align: center; background-color: gray; width: 50%; margin-top: 5%;">
+
+<div style="width: 80%;   margin-left: auto; margin-right: auto;">
+    <h3 style="color: beige; padding: 1%; margin-top: 2%; background-color:rgb(13, 56, 13); font-size:larger; text-align: center;">Configuración inicial del sistema</h3>
+
+    <form action="" method="POST" style="background-color: gray; padding-left: 5%; ">
         {% csrf_token %}
-        <h3 style="text-decoration-color: green;">Complete el formulario por una unica vez</h3>
-        <table style="color: red; margin: 20px auto;">{{ConfigurationFieldValues.as_table}}</table>
-        <input type="submit" value="Guardar" style="width: 150px;">
+        {% if ConfigurationFieldValues != null %}
+            {% for s in ConfigurationFieldValues %}
+        
+            <input type="hidden" name="id" value="{{s.id}}"></ul>
+            <ul><input type="text" name="nombre_campo" value="{{s.nombre_campo}}"> Nombre del Campo </ul>
+            <ul><input type="text" name="provincia" value="{{s.provincia}}"> Provincia</ul>
+            <ul><input type="text" name="ciudad" value="{{s.ciudad}}"> Ciudad</ul>
+            <ul><input type="number" name="humedad_requerida_local" value="{{s.humedad_requerida_local}}"> Humedad del suelo ideal Requerida por el cultivo</ul>
+            <ul><input type="number" name="humedad_minima_local" value="{{s.humedad_minima_local}}"> Humedad del suelo minima soportada por el cultivo</ul>
+            <ul><input type="number" name="humedad_maxima_local" value="{{s.humedad_maxima_local}}"> Humedad del suelo maxima soportada por el cultivo</ul>
+            <ul><input type="text" name="cultivo" value="{{s.cultivo}}"> Tipo de Cultivo</ul>
+            <ul><input type="number" name="area_cubierta" value="{{s.area_cubierta}}"> Area Cubierta (m2)</ul>
+            <ul><p>Si cambia los datos se reiniciará el algoritmo que calcula el tiempo de riego. </p></ul>
+
+            {% endfor %}
+        {% else %}
+            <input type="hidden" name="id" value=1></ul>
+            <ul><input type="text" name="nombre_campo" value=""> Nombre del Campo </ul>
+            <ul><input type="text" name="provincia" value=""> Provincia</ul>
+            <ul><input type="text" name="ciudad" value=""> Ciudad</ul>
+            <ul><input type="number" name="humedad_requerida_local" value=""> Humedad del suelo ideal Requerida por el cultivo</ul>
+            <ul><input type="number" name="humedad_minima_local" value=""> Humedad del suelo minima soportada por el cultivo</ul>
+            <ul><input type="number" name="humedad_maxima_local" value=""> Humedad del suelo maxima soportada por el cultivo</ul>
+            <ul><input type="text" name="cultivo" value=""> Tipo de Cultivo</ul>
+            <ul><input type="number" name="area_cubierta" value=""> Area Cubierta (m2)</ul>
+            <ul><p>Los datos ingresados se usarán como condiciones inicales para el riego automatico. </p></ul>
+        {% endif %}
+        
+        <div style="text-align:center"><input type="submit" value="Editar" style="width: 150px;"></div>
     </form>    
 </div>
-</center>
-
 
 {% endblock %}
