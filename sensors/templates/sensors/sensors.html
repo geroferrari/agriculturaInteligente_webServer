@@ -1,10 +1,8 @@
 {% extends "main/base.html" %}
 
-{% load static %}
-
 {% block content %}
 
-<div id="container" style="width: 75%; background-color: rgb(210, 243, 156); margin-left: auto; margin-right: auto; margin-top: 2%;"  >
+<div style="width: 75%; background-color: rgb(210, 243, 156); margin-left: auto; margin-right: auto; margin-top: 2%;"  >
   <canvas id="population-chart" data-url="{% url 'population-chart' %}"></canvas>
 </div>
 
@@ -29,12 +27,6 @@
             data: data.data1.data,
             borderColor: 'rgb(255, 99, 132)',
             tension: 0.5
-          }, {
-            type: 'line',
-            label: "Sensor 2",
-            data: data.data2.data,
-            borderColor: 'rgb(54, 162, 235)',
-            tension: 0.5
           }
           ]
         };
@@ -43,15 +35,29 @@
           type: 'line',
           data: dataToPrint,
           options: {
-
             responsive: true,
             legend: {
               position: 'top',
             },
             title: {
               display: true,
-              text: 'Population Bar Chart'
-            }
+              text: 'Historial Humedad del Suelo por sensor'
+            },
+            scales: {
+              xAxes: [{
+                  position: 'bottom',
+                  scaleLabel: {
+                    display: true,
+                    labelString: 'Fecha y Hora'
+                  }
+              }],
+              yAxes: [{
+                scaleLabel: {
+                  display: true,
+                  labelString: 'Humedad'
+                }
+          }]
+          }         
           }
         });
 

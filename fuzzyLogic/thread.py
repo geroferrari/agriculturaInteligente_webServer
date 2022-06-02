@@ -23,14 +23,23 @@ class CreateFuzzyThread(threading.Thread):
                 configurationFieldValues=ConfigurationFieldModel.objects.get(id = 1)
 
                 #verifico que el riego no este encendido
+                print("------------------------------------------------")
+                print("[info] Verificando si el riego esta prendido...")
                 if irrigationValues.encendido == "on":
-                    print("Riego Encendido")
+                    print("[info] Riego Encendido - No enciendo riego")
                     continue
 
+                print("[info] Riego apagado")
+                print("------------------------------------------------")
+
                 #verifico que este activado el modo automatico
+                print("[info] Verificando si el riego automatico esta autorizado...")
                 if irrigationValues.automatico == "off":
-                    print("Riego Automatico apagado")
+                    print("[info] Riego Automatico apagado")
                     continue
+
+                print("[info] Riego Automatico apagado")
+                print("------------------------------------------------")
 
                 #data from sensors and api
                 #la humedad actual entregafa por los sensores, deberia hacer un promedio entre todos
@@ -38,27 +47,39 @@ class CreateFuzzyThread(threading.Thread):
                 #si llueve o no los proximos X dias
                 
                 #verifico que la humedad sea menor al minimo establecido por el usuario
+                print("[info] Verificando si la humedad medida < humedad minima...")
                 humidity_measured = 10
             
                 if humidity_measured > configurationFieldValues.humedad_minima_local:
-                    print("Humedad mayor a la minima")
+                    print("[info] Humedad mayor a la minima")
                     continue
 
+                print("[info] Humedad menor a la minima")
+                print("------------------------------------------------")
 
                 #verifico que no sea de dia. 
+
                 temperature_data = temperatureAPIData()
+                print("[info] Verificando si es de dia y se permite regar...")
 
                 if irrigationValues.riego_diurno == "off":
                     if datetime.now().timestamp() > temperature_data["sunrise"] and datetime.now().timestamp() < temperature_data["sunset"] :
-                        print("es de dia")
+                        print("[info] es de dia - no se puede regar")
                         continue
+                print("[info] Es de noche / se permite el riego diurno")
 
+                print("------------------------------------------------")
 
+                print("[info] Verificando si llovera en los proximos dias...")
                 #verifico que no llueva por los proximos X dias 
                 if rainAPIData(irrigationValues.cantidad_dias_sin_lluvia) == True:
-                    print("va a llover")
+                    print("[info] va a llover - no se regará")
                     continue
                 
+                print("[info] No va a llover")
+
+                print("------------------------------------------------")
+
                 
                 #algoritmo convergente:
                 step_number = 0
@@ -96,34 +117,35 @@ class CreateFuzzyThread(threading.Thread):
                     duration_percentage_update = 0
                     break
 
-                elif step_number == 0:
-                    duration_percentage_update = 0.1
+                elif step_number == 0   :
+                    duration_percentage_update = 0
                     step_number == 1
 
                 # si es distinto de cero, signifca que ya hay un stepnumber, entoces calculo el valor    
                 else:
-                    if last_humidity_diference > 0  and step_number == 1:
+                    if last_humidity_diference > 0  and step_number == 1 and duration_percentage_flag == 0:
                         duration_percentage_flag = 1
                         step_number = 1
                         duration_percentage_update = 0.1
                         #significa que me pase del valor en el primer intento, tengo que empezar a restar de a 10%
-                    
-                    elif last_humidity_diference > 0 and step_number != 1:
+
+                    elif last_humidity_diference < 0 and step_number == 1 and duration_percentage_flag == 0:
+                        duration_percentage_flag = 1
+                        step_number = 1
+                        duration_percentage_update = 0.1
+                        #significa que con el tiempo actual no llegue al valor y tengo que subir de a 10%
+
+                    elif last_humidity_diference > 0 and step_number!=1000 and duration_percentage_flag == 1:
                         step_number+=1
-                        duration_percentage_update = duration_percentage_update - ()
+                        duration_percentage_update = duration_percentage_update - (duration_percentage_update * 0.1)
                         #significa que me pase del valor pero venia subiendo de a 10%, tengo que disminuir el porcentaje 
                     
-                    elif last_humidity_diference < 0 and duration_percentage_flag == 1: 
+                    elif last_humidity_diference < 0 and step_number!=1000 and duration_percentage_flag == 1: 
                         step_number += 1
+                        duration_percentage_update = duration_percentage_update - (duration_percentage_update * 0.1)
                         #seria cuando ya me habia pasado y tengo que empezar a retroceder bajando el %
-                        print()
-                    else: 
-                        step_number=1
-                        #cuando last_humidity_diference < 0 y todavia nunca llegue al valor. avanzo de a 10%
-                        print()
 
-                    duration_percentage_update = 0.1 - (step_number*0.01)
-                    duration_percentage_update = duration_percentage_update * (duration_percentage_update * 0.1)
+
 
                 #actualizo la maxima duración del algoritmo para obtener una respuesta mas certera
                 if last_humidity_diference < 0:
