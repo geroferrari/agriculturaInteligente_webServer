@@ -6,7 +6,6 @@ from django.http import JsonResponse
 import numpy as np
 
 def sensors(request):
-
     return render(request, "sensors/sensors.html")
 
 def population_chart(request):
