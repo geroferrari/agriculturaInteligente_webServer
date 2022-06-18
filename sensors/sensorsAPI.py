@@ -3,6 +3,7 @@ import json
 import time
 import paho.mqtt.client
 from django.db import connection
+from configuration.models import ConfigurationFieldModel
 
 
 def on_connect(client, userdata, flags, rc):
@@ -10,20 +11,26 @@ def on_connect(client, userdata, flags, rc):
 
 def checkTableExists(tablename):
 	dbcur = connection.cursor()
-	db_query = """SELECT name FROM sqlite_master WHERE type='table' AND name = '{tablename}' """
-	listOfTables  = dbcur.execute(db_query).fetchall()
-	dbcur.close()
-	if listOfTables == []:
-		print('Table not found!')
-		return False
-	else:
+	db_query = " SELECT count(name) FROM sqlite_master WHERE type='table' AND name='" + tablename + "' " 
+	dbcur.execute(db_query)
+	print(db_query)
+	if dbcur.fetchone()[0]==1:
 		print('Table found!')
+		dbcur.close()
 		return True
+	else:
+		print('Table not found!')
+		sensores = ConfigurationFieldModel.objects.first()
+		sensores.cantidad_sensores +=1
+		sensores.save()
+		dbcur.close()
+		return False
 
 def insertRowInTable(tablename, data):
 	cursor = connection.cursor()
-	database_row =""" INSERT INTO """ + tablename + """ (sensorId, humedad, bateria, tiempoMuestreo, estado, date) VALUES ('sensor0x00007' , '20' , '100' , '60' , 'conectado' , '2022-03-31 19:02:11.454627' ); """
-	cursor.execute(database_row)
+	database_row =""" INSERT INTO """ + tablename + """ (sensorId, humedad, bateria, tiempoMuestreo, estado, date) VALUES ( %s ,  %s , %s ,  %s , %s ,  %s ); """
+	db_values =(data['Address'], data['Humidity'], data['Battery'], data['Report_interval'], 'conectado', data['Time'])
+	cursor.execute(database_row, db_values)
 
 
 def on_message(client, userdata, message):

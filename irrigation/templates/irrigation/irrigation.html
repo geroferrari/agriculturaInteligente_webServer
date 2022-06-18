@@ -59,9 +59,100 @@
 
 </div>
 
+
 <div style="width: 95%;   margin-left: auto; margin-right: auto;">
     <h1 style="color: beige; padding: 1%; margin-top: 2%; background-color:rgb(13, 56, 13); font-size:larger ;">Datos Historicos de Riego</h1>
 
+    <div style="width: 75%; background-color: rgb(210, 243, 156); margin-left: auto; margin-right: auto; margin-top: 2%;"  >
+        <canvas id="irrigation-chart" data-url="{% url 'irrigation-chart' %}"></canvas>
+      </div>
+    
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    <script>
+    
+      $(function () {
+    
+        var $populationChart = $("#irrigation-chart");
+        $.ajax({
+          url: $populationChart.data("url"),
+          success: function (data) {
+    
+            var ctx = $populationChart[0].getContext("2d");
+    
+            dataToPrint = {
+              labels: data.labels,
+              datasets: [{
+                type: 'bubble',
+                label: "Duracion del Riego",
+                data: data.duracion,
+                borderColor: 'rgb(255,0,0)',
+                backgroundColor: 'rgb(255,0,0)',
+                tension: 1,
+                radius: 5
+              },
+              {type: 'line',
+                label: "Duracion maxima permitida",
+                data: data.duracion_maxima,
+                borderColor: 'rgb(51,255,51)',
+                tension: 1,
+              },
+               {
+                type: 'bubble',
+                label: "Agua Utilizada",
+                data: data.cantidad_agua,
+                borderColor: 'rgb(0,0,255)',
+                backgroundColor: 'rgb(0,0,255)',
+                tension: 1,
+                radius: 5
+              },  {
+                type: 'bar',
+                label: "Humedad ganada",
+                data: data.humedad_diferencia,
+                borderColor: 'rgb(0, 0, 0)',
+                backgroundColor: 'rgb(128, 128, 128)',
+                borderWidth: 0.1,
+                tension: 0.5
+              }, 
+              ]
+            };
+            
+            new Chart(ctx, {
+              type: 'linear',
+              data: dataToPrint,
+              options: {
+                responsive: true,
+                legend: {
+                  position: 'top',
+                },
+                title: {
+                  display: true,
+                  text: 'Historial de Riegos'
+                },
+                scales: {
+                  xAxes: [{
+                      position: 'bottom',
+                      scaleLabel: {
+                        display: true,
+                        labelString: 'Fecha y Hora'
+                      }
+                  }],
+                  yAxes: [{
+                    scaleLabel: {
+                      beginAtZero: true,
+                    }
+                }],
+              }         
+              }
+            });
+    
+          }
+        });
+    
+      });
+    
+    </script>
+    <div style="margin-top:2% ;">
     <table class="table" style="background-color: gray;" >
         <tbody>
         <tr>
@@ -83,6 +174,8 @@
 
         </tbody>
     </table>
+    </div>
+
 </div>
 
 {% else %}
@@ -92,5 +185,7 @@
   </div>
 
 {% endif %}
+
+
 
 {% endblock %}

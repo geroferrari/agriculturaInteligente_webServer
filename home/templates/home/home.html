@@ -16,6 +16,7 @@
             <td>Cultivo: {{s.cultivo}}</td>
             <td>Lugar: {{s.ciudad}} ({{s.provincia}})</td>
             <td>Cantidad de Sensores detectados: {{s.cantidad_sensores}}</td>
+            <td>Promedio de Humedad: {{ promedioSensores }}</td>
           </tr>
         </tbody>
       </table>
@@ -36,13 +37,16 @@
 
       {% for key, value in sensorsData.items %}
       <tr>
-        <td scope="row">Sensor {{ key }} </th>
-        <td> {{ value.sensorId }} %</td>
+        <form action="" method="POST">
+        {% csrf_token %}
+        <td>Sensor {{ key }}<input type="hidden" name="key" value="{{ key }}"> </th>
+        <td> {{ value.sensorId }}<input type="hidden" name="sensorId" value="{{ value.sensorId }}">  </td>
         <td> {{ value.humedad }} %</td>
         <td> {{ value.bateria }} %</td>
         <td> {{ value.estado }} </td>
-        <td> {{ value.tiempoMuestreo }} </td>
-        <td> <input type="button" value="Cambiar Tiempo"> </td>
+        <td> <input type="number" name="tiempoMuestreo" value="{{value.tiempoMuestreo}}"> min </td>
+        <td> <input type="submit" value="Cambiar Tiempo"> </td>
+        </form>
       </tr>
       {% endfor %}
     </tbody>

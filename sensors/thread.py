@@ -14,7 +14,7 @@ class CreateMqttThread(threading.Thread):
         try:
             while True:
                 mqttListener()
-                sleep(60)
+                sleep(3600)
         except Exception as e:
             print(e)
 
