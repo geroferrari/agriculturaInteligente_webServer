@@ -3,6 +3,14 @@
 
 The main idea of this web server is to be able to receive telemetry from different sensors, show that information in a pretty way and work with that information to send telecomands to an actuator.
 To be able to decide when to send the information, it has a fuzzy logic algorithm that use the information of the sensors to define an output.
+It is supposed to be used by the owner of the field to know in real time the status of his plants, and turn on/off the irrigation (can be done manually or automatic by the fuzzy logic algorithm).
+
+Some of the characteristics of the web server:
+- Users managment, including a log in page.
+- Receive telecomands and print dashboards with statistics.
+- Receive information from a weather api.
+- Send telecomands to an actuator.
+- Send email alerts to the owner of the field.
 
 
 The project idea can be sum up in the next two diagrams:
