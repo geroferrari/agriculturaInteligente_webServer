@@ -7,6 +7,8 @@ The main idea of this web server is to be able to receive telemetry from differe
 To be able to decide when to send the information, it has a fuzzy logic algorithm that use the information of the sensors to define an output.
 
 
-The project idea can be sum up in the next diagram:
+The project idea can be sum up in the next two diagrams:
+![image](https://github.com/geroferrari/agriculturaInteligente_webServer/assets/38739978/042809d7-48b7-46ac-9f85-c2da8a7aa980)
+
 
 ![image](https://github.com/geroferrari/agriculturaInteligente_webServer/assets/38739978/947a5fd5-a96c-4dd2-8211-7a5cedd358ff)
